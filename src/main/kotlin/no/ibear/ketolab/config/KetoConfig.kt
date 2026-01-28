@@ -21,7 +21,14 @@ class KetoConfig(
     }
 
     @Bean
-    fun relationshipApi(): RelationshipApi {
+    fun relationshipReadApi(): RelationshipApi {
+        val client = ApiClient()
+        client.basePath = readUrl
+        return RelationshipApi(client)
+    }
+
+    @Bean
+    fun relationshipWriteApi(): RelationshipApi {
         val client = ApiClient()
         client.basePath = writeUrl
         return RelationshipApi(client)

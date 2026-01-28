@@ -8,21 +8,23 @@ enum class Role {
 
 data class AssignRoleRequest(
     val userId: String,
-    val role: Role
-)
-
-data class CheckRoleRequest(
-    val userId: String,
+    val companyId: String,
     val role: Role
 )
 
 data class RoleCheckResult(
     val hasRole: Boolean,
     val userId: String,
+    val companyId: String,
     val role: Role
+)
+
+data class CompanyRoles(
+    val companyId: String,
+    val roles: List<Role>
 )
 
 data class UserRoles(
     val userId: String,
-    val roles: List<Role>
+    val companies: List<CompanyRoles>
 )

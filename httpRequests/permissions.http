@@ -1,0 +1,56 @@
+### Assign user1 to HR role at Acme Corp
+POST http://localhost:8080/api/permissions/assign
+Content-Type: application/json
+
+{
+  "userId": "user1",
+  "companyId": "acme",
+  "role": "HR"
+}
+
+### Assign user1 to ECONOMY role at Globex
+POST http://localhost:8080/api/permissions/assign
+Content-Type: application/json
+
+{
+  "userId": "user1",
+  "companyId": "globex",
+  "role": "ECONOMY"
+}
+
+### Assign user2 to ADMIN role at Acme (inherits HR and ECONOMY)
+POST http://localhost:8080/api/permissions/assign
+Content-Type: application/json
+
+{
+  "userId": "user2",
+  "companyId": "acme",
+  "role": "ADMIN"
+}
+
+### Check if user1 has HR role at Acme (should be true)
+GET http://localhost:8080/api/permissions/check?userId=user1&companyId=acme&role=HR
+
+### Check if user1 has HR role at Globex (should be false)
+GET http://localhost:8080/api/permissions/check?userId=user1&companyId=globex&role=HR
+
+### Check if user2 (admin at Acme) has HR role at Acme (should be true via inheritance)
+GET http://localhost:8080/api/permissions/check?userId=user2&companyId=acme&role=HR
+
+### Check if user2 (admin at Acme) has ECONOMY role at Acme (should be true via inheritance)
+GET http://localhost:8080/api/permissions/check?userId=user2&companyId=acme&role=ECONOMY
+
+### Get all roles for user1 (HR at Acme, ECONOMY at Globex)
+GET http://localhost:8080/api/permissions/user/user1
+
+### Get all roles for user2 (ADMIN, HR, ECONOMY at Acme)
+GET http://localhost:8080/api/permissions/user/user2
+
+### Remove specific role (HR) from user1 at Acme
+DELETE http://localhost:8080/api/permissions/user/user1/company/acme/role/HR
+
+### Remove all roles from user1 at Globex
+DELETE http://localhost:8080/api/permissions/user/user1/company/globex
+
+### Remove all roles from user1 (all companies)
+DELETE http://localhost:8080/api/permissions/user/user1
