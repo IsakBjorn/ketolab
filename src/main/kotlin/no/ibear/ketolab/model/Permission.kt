@@ -28,3 +28,18 @@ data class UserRoles(
     val userId: String,
     val companies: List<CompanyRoles>
 )
+
+enum class Task {
+    LIST_EMPLOYEES,
+    VIEW_EMPLOYEE,
+    EDIT_EMPLOYEE,
+    READ_REPORTS,
+    CREATE_REPORT
+}
+
+data class TaskCheckResult(
+    val allowed: Boolean,
+    val userId: String,
+    val companyId: String,
+    val task: Task
+)

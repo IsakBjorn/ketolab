@@ -1,6 +1,7 @@
 package no.ibear.ketolab.controller
 
 import no.ibear.ketolab.model.*
+import no.ibear.ketolab.model.Task
 import no.ibear.ketolab.service.PermissionService
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
@@ -30,6 +31,16 @@ class PermissionController(
     ): ResponseEntity<RoleCheckResult> {
         val hasRole = permissionService.checkRole(userId, companyId, role)
         return ResponseEntity.ok(RoleCheckResult(hasRole, userId, companyId, role))
+    }
+
+    @GetMapping("/check-task")
+    fun checkTask(
+        @RequestParam userId: String,
+        @RequestParam companyId: String,
+        @RequestParam task: Task
+    ): ResponseEntity<TaskCheckResult> {
+        val allowed = permissionService.checkTask(userId, companyId, task)
+        return ResponseEntity.ok(TaskCheckResult(allowed, userId, companyId, task))
     }
 
     @GetMapping("/user/{userId}")

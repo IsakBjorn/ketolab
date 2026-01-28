@@ -10,6 +10,7 @@ class Company implements Namespace {
   }
 
   permits = {
+    // Role checks
     isAdmin: (ctx: Context): boolean =>
       this.related.admin.includes(ctx.subject),
 
@@ -19,6 +20,15 @@ class Company implements Namespace {
 
     isEconomy: (ctx: Context): boolean =>
       this.related.economy.includes(ctx.subject) ||
-      this.permits.isAdmin(ctx)
+      this.permits.isAdmin(ctx),
+
+    // HR tasks
+    canListEmployees: (ctx: Context): boolean => this.permits.isHr(ctx),
+    canViewEmployee: (ctx: Context): boolean => this.permits.isHr(ctx),
+    canEditEmployee: (ctx: Context): boolean => this.permits.isHr(ctx),
+
+    // Economy tasks
+    canReadReports: (ctx: Context): boolean => this.permits.isEconomy(ctx),
+    canCreateReport: (ctx: Context): boolean => this.permits.isEconomy(ctx),
   }
 }

@@ -14,23 +14,3 @@ services:
       interval: 5s
       timeout: 3s
       retries: 10
-
-  keto-init:
-    image: alpine:latest
-    depends_on:
-      keto:
-        condition: service_healthy
-    volumes:
-      - ./config:/home/ory
-    entrypoint: ["/bin/sh", "-c"]
-    command:
-      - |
-        apk add --no-cache curl jq > /dev/null
-        echo "Loading relation tuples..."
-        jq -c '.[]' /home/ory/relation_tuples.json | while read -r tuple; do
-          echo "Creating: $$tuple"
-          curl -s -X PUT http://keto:4467/admin/relation-tuples -H "Content-Type: application/json" -d "$$tuple"
-          echo ""
-        done
-        echo "Done."
-    restart: "no"

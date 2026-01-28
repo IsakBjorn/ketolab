@@ -44,6 +44,30 @@ class PermissionService(
         }
     }
 
+    fun checkTask(userId: String, companyId: String, task: Task): Boolean {
+        val permission = "can${task.name.split("_").joinToString("") {
+            it.lowercase().replaceFirstChar { c -> c.uppercase() }
+        }}"
+        logger.info("Checking task: user=$userId, company=$companyId, permission=$permission")
+
+        return try {
+            val result = permissionApi.checkPermission(
+                "Company",
+                companyId,
+                permission,
+                userId,
+                null,
+                null,
+                null,
+                null
+            )
+            result.allowed
+        } catch (e: Exception) {
+            logger.error("Error checking task", e)
+            false
+        }
+    }
+
     fun listUserRoles(userId: String): UserRoles {
         val companyRolesMap = mutableMapOf<String, MutableList<Role>>()
 

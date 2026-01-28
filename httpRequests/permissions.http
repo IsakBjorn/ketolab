@@ -54,3 +54,26 @@ DELETE http://localhost:8080/api/permissions/user/user1/company/globex
 
 ### Remove all roles from user1 (all companies)
 DELETE http://localhost:8080/api/permissions/user/user1
+
+### ---- TASK-BASED PERMISSION CHECKS ----
+
+### Check if user1 can list employees (HR task - should be true if user1 has HR role)
+GET http://localhost:8080/api/permissions/check-task?userId=user1&companyId=acme&task=LIST_EMPLOYEES
+
+### Check if user1 can view employee (HR task)
+GET http://localhost:8080/api/permissions/check-task?userId=user1&companyId=acme&task=VIEW_EMPLOYEE
+
+### Check if user1 can edit employee (HR task)
+GET http://localhost:8080/api/permissions/check-task?userId=user1&companyId=acme&task=EDIT_EMPLOYEE
+
+### Check if user1 can read reports (Economy task - should be false if user1 only has HR role)
+GET http://localhost:8080/api/permissions/check-task?userId=user1&companyId=acme&task=READ_REPORTS
+
+### Check if user1 can create report (Economy task)
+GET http://localhost:8080/api/permissions/check-task?userId=user1&companyId=acme&task=CREATE_REPORT
+
+### Check if user2 (admin) can list employees (should be true via admin inheritance)
+GET http://localhost:8080/api/permissions/check-task?userId=user2&companyId=acme&task=LIST_EMPLOYEES
+
+### Check if user2 (admin) can read reports (should be true via admin inheritance)
+GET http://localhost:8080/api/permissions/check-task?userId=user2&companyId=acme&task=READ_REPORTS
