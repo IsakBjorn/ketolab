@@ -1,1 +1,36 @@
-services: { }
+services:
+  keto:
+    image: oryd/keto:latest
+    ports:
+      - "4466:4466"
+      - "4467:4467"
+    volumes:
+      - ./config:/home/ory
+    command: serve -c /home/ory/keto.yml
+    environment:
+      - LOG_LEAK_SENSITIVE_VALUES=true
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://localhost:4466/health/ready"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  keto-init:
+    image: alpine:latest
+    depends_on:
+      keto:
+        condition: service_healthy
+    volumes:
+      - ./config:/home/ory
+    entrypoint: ["/bin/sh", "-c"]
+    command:
+      - |
+        apk add --no-cache curl jq > /dev/null
+        echo "Loading relation tuples..."
+        jq -c '.[]' /home/ory/relation_tuples.json | while read -r tuple; do
+          echo "Creating: $$tuple"
+          curl -s -X PUT http://keto:4467/admin/relation-tuples -H "Content-Type: application/json" -d "$$tuple"
+          echo ""
+        done
+        echo "Done."
+    restart: "no"

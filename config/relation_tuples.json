@@ -1,0 +1,22 @@
+[
+  {
+    "namespace": "Role",
+    "object": "hr",
+    "relation": "inherits",
+    "subject_set": {
+      "namespace": "Role",
+      "object": "admin",
+      "relation": ""
+    }
+  },
+  {
+    "namespace": "Role",
+    "object": "economy",
+    "relation": "inherits",
+    "subject_set": {
+      "namespace": "Role",
+      "object": "admin",
+      "relation": ""
+    }
+  }
+]
